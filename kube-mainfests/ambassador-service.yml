@@ -1,0 +1,47 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    service: ambassador
+  name: ambassador
+  annotations:
+    getambassador.io/config: |
+      ---
+      apiVersion: ambassador/v0
+      kind:  Mapping
+      name:  sender-service
+      prefix: /sender/
+      service: sender-service:8881
+      ---
+      apiVersion: ambassador/v0
+      kind:  Mapping
+      name:  collector-service
+      prefix: /collector/
+      service: collector-service:8883
+      ---
+      apiVersion: ambassador/v0
+      kind:  Mapping
+      name:  visualiser-service
+      prefix: /visualiser/
+      service: visualiser-service:8884
+      ---
+      apiVersion: ambassador/v0
+      kind:  Mapping
+      name:  rabbit-service
+      prefix: /rabbit/
+      service: rabbit-service:15672
+      ---
+      apiVersion: ambassador/v0
+      kind:  Mapping
+      name:  grafana-service
+      prefix: /grafana/
+      service: grafana-service:3000
+spec:
+  type: LoadBalancer
+  ports:
+    - name: ambassador
+      port: 9000
+      targetPort: 9000
+  selector:
+    service: ambassador

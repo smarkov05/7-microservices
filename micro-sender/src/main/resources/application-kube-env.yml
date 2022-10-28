@@ -1,0 +1,29 @@
+spring:
+  config:
+    activate:
+      on-profile: kube-env
+  application:
+    name: sender-service
+  rabbitmq:
+    host: rabbit-service
+    port: 5672
+    username: user
+    password: password
+  cloud:
+    service-registry:
+      auto-registration:
+        enabled: false
+
+server:
+  port: 8881
+
+management:
+  endpoint:
+    metrics:
+      enabled: true
+    prometheus:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: prometheus

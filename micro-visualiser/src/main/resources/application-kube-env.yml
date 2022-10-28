@@ -1,0 +1,35 @@
+spring:
+  config:
+    activate:
+      on-profile: kube-env
+  application:
+    name: visualiser-service
+  cloud:
+    service-registry:
+      auto-registration:
+        enabled: false
+  datasource:
+    url: jdbc:postgresql://postgres-service:5432/message
+    driver-class-name: org.postgresql.Driver
+    username: admin
+    password: password
+  jpa:
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQL10Dialect
+    hibernate:
+      ddl-auto: create-drop
+
+server:
+  port: 8884
+
+management:
+  endpoint:
+    metrics:
+      enabled: true
+    prometheus:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: prometheus
+

@@ -1,0 +1,38 @@
+global:
+  scrape_interval: 5s
+scrape_configs:
+  - job_name: 'prometheus'
+    scrape_interval: 5s
+    static_configs:
+      - targets: [ 'prometheus-7:9090' ]
+
+  - job_name: 'sender-service'
+    metrics_path: '/actuator/prometheus'
+    scrape_interval: 5s
+    static_configs:
+      - targets: [ 'sender-service-7:8881' ]
+#      - targets: ['host.docker.internal:8881']
+
+  - job_name: 'recipient-service'
+    metrics_path: '/actuator/prometheus'
+    scrape_interval: 5s
+    static_configs:
+      - targets: [ 'recipient-service-7:8882' ]
+
+  - job_name: 'collector-service'
+    metrics_path: '/actuator/prometheus'
+    scrape_interval: 5s
+    static_configs:
+      - targets: [ 'collector-service-7:8883' ]
+
+  - job_name: 'eureka-discovery'
+    metrics_path: '/actuator/prometheus'
+    scrape_interval: 5s
+    static_configs:
+      - targets: [ 'eureka-7:8761' ]
+
+  - job_name: 'gateway'
+    metrics_path: '/actuator/prometheus'
+    scrape_interval: 5s
+    static_configs:
+      - targets: [ 'gateway-7:8080' ]

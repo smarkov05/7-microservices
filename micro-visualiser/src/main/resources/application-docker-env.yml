@@ -1,0 +1,45 @@
+docker:
+  containerNames:
+    discoveryService: eureka-7
+
+spring:
+  config:
+    activate:
+      on-profile: docker-env
+  application:
+    name: visualiser-service
+  datasource:
+    url: jdbc:postgresql://postgres:5432/message
+    driver-class-name: org.postgresql.Driver
+    username: admin
+    password: password
+  jpa:
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQL10Dialect
+    hibernate:
+      ddl-auto: create-drop
+
+server:
+  port: 8884
+
+eureka:
+  instance:
+    preferIpAddress: true
+  client:
+    instance-info-replication-interval-seconds: 10
+    registerWithEureka: true
+    fetchRegistry: true
+    serviceUrl:
+      defaultZone: ${EUREKA_URI:http://${docker.containerNames.discoveryService}:8761/eureka}
+
+management:
+  endpoint:
+    metrics:
+      enabled: true
+    prometheus:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: prometheus
+

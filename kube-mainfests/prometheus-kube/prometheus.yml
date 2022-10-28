@@ -1,0 +1,21 @@
+global:
+  scrape_interval: 5s
+scrape_configs:
+
+  - job_name: 'sender-service'
+    metrics_path: '/actuator/prometheus'
+    scrape_interval: 5s
+    static_configs:
+      - targets: [ 'sender-service:8881' ]
+
+  - job_name: 'recipient-service'
+    metrics_path: '/actuator/prometheus'
+    scrape_interval: 5s
+    static_configs:
+      - targets: [ 'recipient-service:8882' ]
+
+  - job_name: 'collector-service'
+    metrics_path: '/actuator/prometheus'
+    scrape_interval: 5s
+    static_configs:
+      - targets: [ 'collector-service:8883' ]

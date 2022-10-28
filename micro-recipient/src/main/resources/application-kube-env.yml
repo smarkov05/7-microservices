@@ -1,0 +1,37 @@
+spring:
+  config:
+    activate:
+      on-profile: kube-env
+  application:
+    name: recipient-service
+  rabbitmq:
+    host: rabbit-service
+    port: 5672
+    username: user
+    password: password
+  data:
+    mongodb:
+      database: recipient
+      port: 27017
+      host: mongo-service
+    jpa:
+      hibernate:
+        ddl-auto: create-drop
+  cloud:
+    service-registry:
+      auto-registration:
+        enabled: false
+
+server:
+  port: 8882
+
+management:
+  endpoint:
+    metrics:
+      enabled: true
+    prometheus:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: prometheus

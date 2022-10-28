@@ -1,0 +1,31 @@
+spring:
+  config:
+    activate:
+      on-profile: docker-env
+
+server:
+  port: 8761
+
+docker:
+  discovery:
+    containerName: eureka-7
+
+eureka:
+  client:
+    register-with-eureka: false
+    fetch-registry: false
+    instance-info-replication-interval-seconds: 10
+    serviceUrl:
+      defaultZone: ${EUREKA_URI:http://${docker.discovery.containerName}:8761/eureka}
+
+management:
+  endpoint:
+    metrics:
+      enabled: true
+    prometheus:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: prometheus
+

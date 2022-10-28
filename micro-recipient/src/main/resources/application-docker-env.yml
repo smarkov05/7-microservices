@@ -1,0 +1,49 @@
+docker:
+  containerNames:
+    discoveryService: eureka-7
+    rabbitmq: rabbit-7
+    mongodb: mongo-7
+
+spring:
+  config:
+    activate:
+      on-profile: docker-env
+  application:
+    name: recipient-service
+  rabbitmq:
+    host: ${docker.containerNames.rabbitmq}
+    port: 5672
+    username: user
+    password: password
+  data:
+    mongodb:
+      database: recipient
+      port: 27017
+      host: ${docker.containerNames.mongodb}
+    jpa:
+      hibernate:
+        ddl-auto: create-drop
+
+server:
+  port: 8882
+
+eureka:
+  instance:
+    preferIpAddress: true
+  client:
+    instance-info-replication-interval-seconds: 10
+    registerWithEureka: true
+    fetchRegistry: true
+    serviceUrl:
+      defaultZone: ${EUREKA_URI:http://${docker.containerNames.discoveryService}:8761/eureka}
+
+management:
+  endpoint:
+    metrics:
+      enabled: true
+    prometheus:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: prometheus

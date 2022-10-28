@@ -1,0 +1,89 @@
+version: '3.1'
+
+services:
+  mongoDB:
+    image: mongo:4.4.17-rc2
+    container_name: mongo-7
+    networks:
+      - recipient-network
+
+  rabbitMQ:
+    image: rabbitmq:3-management
+    container_name: rabbit-7
+    ports:
+      - "15672:15672"
+    environment:
+      - RABBITMQ_DEFAULT_USER=user
+      - RABBITMQ_DEFAULT_PASS=password
+    networks:
+      - sender-network
+      - recipient-network
+
+  prometheus:
+    image: prom/prometheus:main
+    container_name: prometheus-7
+    ports:
+      - "9090:9090"
+    volumes:
+      - 'C:\local_storage\java_projects\mentoring_projects\7_Microservices\7-microservices\external-files:/etc/prometheus'
+    networks:
+      - sender-network
+      - recipient-network
+
+  grafana:
+    image: grafana/grafana:main
+    container_name: grafana-7
+    ports:
+      - "3000:3000"
+    networks:
+      - sender-network
+      - recipient-network
+
+  discovery:
+    image: eureka:1.0.0
+    container_name: eureka-7
+    networks:
+      - sender-network
+      - recipient-network
+
+  api-gateway:
+    image: gateway:1.0.0
+    container_name: gateway-7
+    ports:
+      - "8080:8080"
+    depends_on:
+      - discovery
+    networks:
+      - sender-network
+      - recipient-network
+
+  sender-service:
+    image: micro-sender:1.0.0
+    container_name: sender-service-7
+    depends_on:
+      - discovery
+    networks:
+      - sender-network
+
+  recipient-service:
+    image: micro-recipient:1.0.0
+    container_name: recipient-service-7
+    depends_on:
+      - mongoDB
+      - discovery
+    networks:
+      - recipient-network
+
+  collector-service:
+    image: micro-collector:1.0.0
+    container_name: collector-service-7
+    depends_on:
+      - discovery
+    networks:
+      - recipient-network
+
+networks:
+  sender-network:
+    external: false
+  recipient-network:
+    external: false

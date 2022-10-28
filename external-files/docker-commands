@@ -1,0 +1,12 @@
+docker run -d --name prometheus -p 9090:9090  prom/prometheus
+-v <path to prometheus.yml>:/etc/prometheus
+
+docker run -d --name grafana -p 3000:3000  grafana/grafana
+
+docker run -d --name mongoDB -p 27017:27017 mongo:4.4.17-rc2
+
+containerNames:
+	rabbitmq: rabbit
+
+grafana - jvm native memory
+(process_memory_pss_bytes{application="$application", instance="$instance"} + process_memory_swap_bytes{application="$application", instance="$instance"}  - on(application,instance) sum(jvm_memory_committed_bytes{application="$application", instance="$instance"})  by(application,instance)) >= 0
